@@ -3,30 +3,57 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 import React from "react";
 import { IMAGE_BASE_URL } from "../backend/lib/tbdbRequests";
 import { MovieRespObj } from "../typing";
-import { styled as MuiSyled } from "@mui/material/styles";
-import { InfoOutlined, PlayArrow, PlayArrowRounded } from "@mui/icons-material";
+import {
+  styled as MuiSyled,
+  createTheme,
+  useTheme,
+  ThemeProvider,
+  Theme,
+} from "@mui/material/styles";
+import { InfoOutlined, PlayArrowRounded } from "@mui/icons-material";
 import { useRecoilState } from "recoil";
-import { modalShowState } from "../atoms/generalAtoms";
+import { modalShowState, videoSrcState } from "../atoms/generalAtoms";
+import { makeStyles, createStyles } from "@mui/styles";
 
-const Hero = ({ movie }: { movie: MovieRespObj }) => {
+const Hero = ({ movie }: { movie: MovieRespObj | null }) => {
   const [show, setShow] = useRecoilState(modalShowState);
+  const [videoId, setVideoId] = useRecoilState(videoSrcState);
+
   return (
     <Box position="relative" width="100%" height="100vh">
       <ImageTag src={`${IMAGE_BASE_URL}${movie?.backdrop_path}`} />
       <Wrapper>
         <Box position="absolute" bottom="30%" width="100%" px="40px">
-          <Typography
+          <CustomeTypo
             variant="h2"
-            component="h1"
             fontWeight={700}
             textAlign="left"
             mb="20px"
+            fSize={35}
+            fWeight={600}
           >
             {movie?.title || movie?.name || movie?.original_title}
-          </Typography>
-          <Typography_ variant="h6" fontWeight={400} width="70%">
+          </CustomeTypo>
+          <CustomeTypo
+            variant="h6"
+            width="70%"
+            w="90%"
+            fSize="17px"
+            champ
+            // sx={(theme) => ({
+            //   [theme.breakpoints.down("md")]: {
+            //     display: "-webkit-box",
+            //     fontSize: "17px",
+            //     width: "90%",
+            //     WebkitLineClamp: 3,
+            //     WebkitBoxOrient: "vertical",
+            //     overflow: "hidden",
+            //     textOverflow: "ellipsis",
+            //   },
+            // })}
+          >
             {movie?.overview}
-          </Typography_>
+          </CustomeTypo>
           <Stack
             direction="row"
             spacing={2}
@@ -45,7 +72,10 @@ const Hero = ({ movie }: { movie: MovieRespObj }) => {
               forColor="#fff"
               bgColor="rgba(255,255,255, .3)"
               startIcon={<InfoOutlined />}
-              onClick={() => setShow(true)}
+              onClick={() => {
+                setShow(true);
+                setVideoId(movie?.id || "");
+              }}
             >
               More Info
             </CustomeButton>
@@ -78,14 +108,27 @@ const Wrapper = styled("div")`
   );
 `;
 
-const Typography_ = MuiSyled(Typography)(({ theme }) => ({
-  [theme.breakpoints.down("md")]: {
-    fontSize: "17px",
-    width: "90%",
-    height: "200px",
-    overflow: "auto",
-  },
-}));
+type TextProps = {
+  fSize: string | number;
+  fWeight?: string | number;
+  w?: string | number;
+  champ?: boolean;
+};
+
+const CustomeTypo = MuiSyled(Typography)<TextProps>(
+  ({ theme, fSize, fWeight, w, champ }) => ({
+    [theme.breakpoints.down("md")]: {
+      fontSize: fSize,
+      width: w && w,
+      fontWeight: fWeight && fWeight,
+      display: champ && "-webkit-box",
+      overflow: champ && "hidden",
+      textOverflow: champ && "ellipsis",
+      WebkitLineClamp: champ && 3,
+      WebkitBoxOrient: champ && "vertical",
+    },
+  })
+);
 
 type DivProps = {
   bgColor: string;

@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import Head from "next/head";
-import { ReactElement, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { modalShowState } from "../atoms/generalAtoms";
 import tbdbRequests from "../backend/lib/tbdbRequests";
@@ -8,15 +8,18 @@ import Hero from "../components/Hero";
 import Navbar from "../components/Navbar";
 import TrailerModal from "../components/TrailerModal";
 import PageLayout from "../layout/AuthLayout";
-import { MoviesObject, MoviesRespObj } from "../typing";
+import { MovieRespObj, MoviesObject, MoviesRespObj } from "../typing";
 
 const Home = ({ moviesObject }: { moviesObject: MoviesObject }) => {
-  const randomMovie =
-    Object.values(moviesObject)[
-      Math.floor(Math.random() * Object.values(moviesObject).length)
-    ].results[Math.floor(Math.random() * 20)];
+  const [randomMovie, setRandomMovie] = useState<MovieRespObj | null>(null);
 
-  const [showModal, setShowModal] = useRecoilState(modalShowState);
+  useEffect(() => {
+    setRandomMovie(
+      Object.values(moviesObject)[
+        Math.floor(Math.random() * Object.values(moviesObject).length)
+      ].results[Math.floor(Math.random() * 20)]
+    );
+  }, [moviesObject]);
 
   return (
     <div>
@@ -26,7 +29,7 @@ const Home = ({ moviesObject }: { moviesObject: MoviesObject }) => {
       <Box position="relative">
         <Navbar />
         <Hero movie={randomMovie} />
-        {showModal && <TrailerModal />}
+        <TrailerModal />
       </Box>
     </div>
   );

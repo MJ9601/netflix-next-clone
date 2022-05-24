@@ -34,7 +34,7 @@ export interface MovieRespObj {
   vote_count?: number;
 }
 
-export interface MovieObjectOnPage {
+export type MovieObjectOnPage = {
   backdrop_path: string;
   budget: number;
   homepage: string;
@@ -71,4 +71,4 @@ export interface MovieObjectOnPage {
       { id: string; key: string; type: string; name: string; site: string }
     ];
   };
-}
+} | null;

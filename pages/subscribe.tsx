@@ -1,18 +1,11 @@
 import { styled } from "@mui/material/styles";
-import {
-  Box,
-  Button,
-  Container,
-  Input,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import Head from "next/head";
-import Image from "next/image";
 import React, { ReactElement } from "react";
-import { pink, red } from "@mui/material/colors";
+import { red } from "@mui/material/colors";
 import MainPageRowSec from "../components/MainPageRowSec";
 import AuthLayout from "../layout/AuthLayout";
+import { subscribePageLoad } from "../backend/lib/pageLoads";
 
 const Subscribe = () => {
   return (
@@ -95,7 +88,7 @@ const Subscribe = () => {
           </Center>
         </Wrapper>
         <Container>
-          {pageLoad.map((load, index) => (
+          {subscribePageLoad.map((load, index) => (
             <MainPageRowSec
               key={index}
               load={load.load}
@@ -149,40 +142,3 @@ const InputTag = styled("input")(() => ({
     outline: "none",
   },
 }));
-
-export const pageLoad = [
-  {
-    load: {
-      headline: "Enjoy on your TV",
-      content: "Watch on Smart TVs, Xbox, Bluray players, and more",
-    },
-    isleft: true,
-    url: "/images/tv.png",
-  },
-  {
-    load: {
-      headline: "Download your show on your smartphone",
-      content: "Save your favorites show on your phone",
-    },
-    isleft: false,
-    url: "/images/phone.png",
-  },
-  {
-    load: {
-      headline: "Watch everywhere",
-      content:
-        "Stream unlimited movies and TV shows on your tablet, phone , ....",
-    },
-    isleft: true,
-    url: "/images/everywhere.png",
-  },
-  {
-    load: {
-      headline: "Create profiles for children",
-      content:
-        "Send children on adventures with their favorite characters in a space made just for them",
-    },
-    isleft: false,
-    url: "/images/kids.png",
-  },
-];

@@ -41,7 +41,7 @@ export default MainPageRowSec;
 const ImageTag = styled("img")(({ theme }) => ({
   width: "50%",
   objectFit: "contain",
-  [theme.breakpoints.down("lg")]: {
+  [theme.breakpoints.down("md")]: {
     width: "80%",
   },
 }));
@@ -51,7 +51,7 @@ const Stack_ = styled(Stack)(({ theme }) => ({
   gap: "20px",
   alignItems: "center",
   justifyContent: "space-between",
-  [theme.breakpoints.down("lg")]: {
+  [theme.breakpoints.down("md")]: {
     flexDirection: "column",
     gap: "35px",
     padding: "30px 0",

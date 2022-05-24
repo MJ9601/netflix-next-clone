@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import React, { ReactElement } from "react";
 
-const AuthLayout = ({ children }: { children: ReactElement }) => {
+const PageLayout = ({ children }: { children: ReactElement }) => {
   return (
     <AppWrap>
       {children}
@@ -10,9 +10,10 @@ const AuthLayout = ({ children }: { children: ReactElement }) => {
   );
 };
 
-export default AuthLayout;
+export default PageLayout;
 const AppWrap = styled("div")`
   background-color: #000;
+  color: #fff;
 `;
 
 const Footer = styled("footer")`

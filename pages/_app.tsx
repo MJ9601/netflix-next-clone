@@ -3,6 +3,7 @@ import type { AppProps } from "next/app";
 import { NextPage } from "next";
 import { ReactElement, ReactNode } from "react";
 import Head from "next/head";
+import { RecoilRoot } from "recoil";
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -20,7 +21,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         <title>Netflix clone</title>
       </Head>
 
-      {getLayout(<Component {...pageProps} />)}
+      <RecoilRoot>{getLayout(<Component {...pageProps} />)}</RecoilRoot>
     </>
   );
 }

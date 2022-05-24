@@ -9,9 +9,10 @@ import {
 } from "@mui/material";
 import Head from "next/head";
 import Image from "next/image";
-import React from "react";
+import React, { ReactElement } from "react";
 import { pink, red } from "@mui/material/colors";
 import MainPageRowSec from "../components/MainPageRowSec";
+import AuthLayout from "../layout/AuthLayout";
 
 const Subscribe = () => {
   return (
@@ -19,28 +20,33 @@ const Subscribe = () => {
       <Head>
         <title>Netflix next clone</title>
       </Head>
-      <Box position={"relative"} sx={{ backgroundColor: "#333" }}>
+      <Box
+        position={"relative"}
+        sx={{ backgroundColor: "#000", color: "#fff" }}
+      >
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          px="20px"
+          position="fixed"
+          top={0}
+          width="100%"
+          zIndex={100}
+        >
+          <Logo src="/images/logo.png" />
+          <Button
+            variant="contained"
+            sx={{
+              backgroundColor: red["A400"],
+              ":hover": { background: red["A400"] },
+            }}
+          >
+            sign in
+          </Button>
+        </Stack>
         <ImageTage src="/images/background.jpg" />
         <Wrapper>
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-            px="20px"
-            position="sticky"
-            top={0}
-          >
-            <Logo src="/images/logo.png" />
-            <Button
-              variant="contained"
-              sx={{
-                backgroundColor: red["A400"],
-                ":hover": { background: red["A400"] },
-              }}
-            >
-              sign in
-            </Button>
-          </Stack>
           <Center>
             <Stack direction="column" spacing={2}>
               <Typography
@@ -88,21 +94,22 @@ const Subscribe = () => {
             </Stack>
           </Center>
         </Wrapper>
-        <Container sx={{ background: red[800] }}>
-          <MainPageRowSec
-            load={{
-              headline: "Enjoy on your TV",
-              content: "Watch on Smart TVs, Xbox, Bluray players,and more.",
-            }}
-            isleft
-            url="/images/tv.jpg"
-          />
+        <Container>
+          {pageLoad.map((load, index) => (
+            <MainPageRowSec
+              key={index}
+              load={load.load}
+              isleft={load.isleft}
+              url={load.url}
+            />
+          ))}
         </Container>
       </Box>
     </div>
   );
 };
 
+Subscribe.getLayout = (page: ReactElement) => <AuthLayout>{page}</AuthLayout>;
 export default Subscribe;
 
 const ImageTage = styled("img")(({ theme }) => ({
@@ -142,3 +149,40 @@ const InputTag = styled("input")(() => ({
     outline: "none",
   },
 }));
+
+export const pageLoad = [
+  {
+    load: {
+      headline: "Enjoy on your TV",
+      content: "Watch on Smart TVs, Xbox, Bluray players, and more",
+    },
+    isleft: true,
+    url: "/images/tv.png",
+  },
+  {
+    load: {
+      headline: "Download your show on your smartphone",
+      content: "Save your favorites show on your phone",
+    },
+    isleft: false,
+    url: "/images/phone.png",
+  },
+  {
+    load: {
+      headline: "Watch everywhere",
+      content:
+        "Stream unlimited movies and TV shows on your tablet, phone , ....",
+    },
+    isleft: true,
+    url: "/images/everywhere.png",
+  },
+  {
+    load: {
+      headline: "Create profiles for children",
+      content:
+        "Send children on adventures with their favorite characters in a space made just for them",
+    },
+    isleft: false,
+    url: "/images/kids.png",
+  },
+];

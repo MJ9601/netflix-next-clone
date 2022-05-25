@@ -62,7 +62,7 @@ const CustomeBox = styled(Box)<CustomeBg>(({ theme, darkBg }) => ({
   height: "60px",
   backgroundColor: darkBg ? "#000" : "transparent",
   padding: "20px 10px",
-  zIndex: "100",
+  zIndex: "110",
   width: "100%",
   transition: "all .3s ease",
 }));

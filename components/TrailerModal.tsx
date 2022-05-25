@@ -74,7 +74,7 @@ const TrailerModal = () => {
             }
             muted={isMuted}
             width="100%"
-            height="60%"
+            height="70%"
             playing={open && isPlaying}
             className={classes.root}
           />
@@ -251,7 +251,7 @@ const Wrapper = styled("div")(({ theme }) => ({
   position: "relative",
   padding: 0,
   width: "80%",
-  height: "80vh",
+  height: "90vh",
   [theme.breakpoints.down("md")]: {
     width: "90%",
   },
@@ -259,7 +259,7 @@ const Wrapper = styled("div")(({ theme }) => ({
 
 const VideoController = styled("div")(({ theme }) => ({
   position: "absolute",
-  height: "60%",
+  height: "70%",
   top: 0,
   left: 0,
   width: "100%",

@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Button, IconButton, Stack, Typography } from "@mui/material";
 import React from "react";
 import { IMAGE_BASE_URL } from "../backend/lib/tbdbRequests";
-import { MovieRespObj } from "../typing";
+import { MovieObjectOnPage, MovieRespObj } from "../typing";
 import {
   styled as MuiSyled,
   createTheme,
@@ -10,12 +10,21 @@ import {
   ThemeProvider,
   Theme,
 } from "@mui/material/styles";
-import { InfoOutlined, PlayArrowRounded } from "@mui/icons-material";
+import {
+  Add,
+  AddCircleTwoTone,
+  InfoOutlined,
+  PlayArrowRounded,
+} from "@mui/icons-material";
 import { useRecoilState } from "recoil";
 import { modalShowState, videoSrcState } from "../atoms/generalAtoms";
 import { makeStyles, createStyles } from "@mui/styles";
 
-const Hero = ({ movie }: { movie: MovieRespObj | null }) => {
+const Hero = ({
+  movie,
+}: {
+  movie: MovieRespObj | null | MovieObjectOnPage;
+}) => {
   const [show, setShow] = useRecoilState(modalShowState);
   const [videoId, setVideoId] = useRecoilState(videoSrcState);
 
@@ -32,7 +41,7 @@ const Hero = ({ movie }: { movie: MovieRespObj | null }) => {
             fSize={35}
             fWeight={600}
           >
-            {movie?.title || movie?.name || movie?.original_title}
+            {movie?.title || movie?.original_title}
           </CustomeTypo>
           <CustomeTypo
             variant="h6"
@@ -79,6 +88,22 @@ const Hero = ({ movie }: { movie: MovieRespObj | null }) => {
             >
               More Info
             </CustomeButton>
+            <IconButton>
+              <Add
+                sx={{
+                  color: "#fff",
+                  fontSize: 40,
+                  borderRadius: "50%",
+                  transition: "all .3s ease",
+                  backgroundColor: "rgba(255,255,255, .4)",
+                  outline: "2px solid rgba(255,255,255, .4)",
+                  ":hover": {
+                    outline: "2px solid #fff",
+                    backgroundColor: "rgba(255,255, 255, .2)",
+                  },
+                }}
+              />
+            </IconButton>
           </Stack>
         </Box>
       </Wrapper>

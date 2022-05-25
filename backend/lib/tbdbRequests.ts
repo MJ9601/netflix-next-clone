@@ -12,8 +12,8 @@ export default {
   "Action Movies": `${BASE_URL}/discover/movie?api_key=${NEXT_PUBLIC_API_KEY}&with_genres=28`,
   "Comedy Movies": `${BASE_URL}/discover/movie?api_key=${NEXT_PUBLIC_API_KEY}&with_genres=35`,
   "Horror Movies": `${BASE_URL}/discover/movie?api_key=${NEXT_PUBLIC_API_KEY}&with_genres=27`,
-  "Romance Movies": `${BASE_URL}/discover/movie?api_key=${NEXT_PUBLIC_API_KEY}&with_genres=10749`,
   Documentaries: `${BASE_URL}/discover/movie?api_key=${NEXT_PUBLIC_API_KEY}&with_genres=99`,
+  "Romance Movies": `${BASE_URL}/discover/movie?api_key=${NEXT_PUBLIC_API_KEY}&with_genres=10749`,
 };
 
 export const urlForMovieWithId = (movieId: string | number) =>

@@ -1,15 +1,62 @@
+import { Box } from "@mui/material";
+import { GetStaticProps } from "next";
 import Head from "next/head";
 import React from "react";
+import tbdbRequests, {
+  urlForMovieWithId,
+} from "../../backend/lib/tbdbRequests";
+import Hero from "../../components/Hero";
+import Navbar from "../../components/Navbar";
+import { MovieObjectOnPage, MoviesRespObj } from "../../typing";
 
-const VideoPage = () => {
+const VideoPage = ({ movie }: { movie: MovieObjectOnPage }) => {
   return (
     <div>
       <Head>
-        <title>video title</title>
+        <title>{movie?.title || movie?.original_title}</title>
       </Head>
-      <div>video section</div>
+      <Navbar />
+      <Box sx={{ color: "#fff" }}>
+        <Hero movie={movie} />
+      </Box>
     </div>
   );
 };
 
 export default VideoPage;
+
+export const getStaticPaths = async () => {
+  const videoResp = await Promise.all(
+    Object.values(tbdbRequests).map((url) => fetch(url))
+  );
+  const videos = await Promise.all(videoResp.map((element) => element.json()));
+
+  const ids: number[] = videos.reduce((acc, videolist: MoviesRespObj) => {
+    return [...acc, ...videolist.results.map((video) => video.id)];
+  }, []);
+
+  const paths = ids.map((id) => ({
+    params: {
+      id: String(id),
+    },
+  }));
+
+  return {
+    paths,
+    fallback: "blocking",
+  };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const url = urlForMovieWithId(String(params?.id));
+
+  const movie = await (await fetch(url)).json();
+  if (!movie) return { notFound: true };
+
+  return {
+    props: {
+      movie,
+    },
+    revalidate: 3600 * 60 * 24,
+  };
+};

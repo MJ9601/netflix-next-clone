@@ -13,6 +13,8 @@ import { MovieRespObj, MoviesObject, MoviesRespObj } from "../typing";
 const Home = ({ moviesObject }: { moviesObject: MoviesObject }) => {
   const [randomMovie, setRandomMovie] = useState<MovieRespObj | null>(null);
 
+  const [isOpend, setIsOpend] = useRecoilState(modalShowState);
+
   useEffect(() => {
     setRandomMovie(
       Object.values(moviesObject)[
@@ -26,10 +28,10 @@ const Home = ({ moviesObject }: { moviesObject: MoviesObject }) => {
       <Head>
         <title>Home page</title>
       </Head>
-      <Box position="relative">
+      <Box position="relative" height="200vh">
         <Navbar />
         <Hero movie={randomMovie} />
-        <TrailerModal />
+        {isOpend && <TrailerModal />}
       </Box>
     </div>
   );

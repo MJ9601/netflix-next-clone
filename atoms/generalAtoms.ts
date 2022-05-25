@@ -1,15 +1,15 @@
 import { atom } from "recoil";
-import { MovieObjectOnPage } from "../typing";
+import { MovieObjectOnPage, MovieRespObj, MoviesRespObj } from "../typing";
 
 export const modalShowState = atom<boolean>({
   key: "modalShowState",
   default: false,
 });
 
-// export const modalVideoState = atom<MovieObjectOnPage | {}>({
-//   key: "modalVideoState",
-//   default: {},
-// });
+export const wishListState = atom<MovieObjectOnPage[] | []>({
+  key: "wishListState",
+  default: [],
+});
 
 export const videoSrcState = atom<string | number>({
   key: "videoSrcState",

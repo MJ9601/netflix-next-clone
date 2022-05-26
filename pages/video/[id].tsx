@@ -7,6 +7,7 @@ import tbdbRequests, {
 } from "../../backend/lib/tbdbRequests";
 import Hero from "../../components/Hero";
 import Navbar from "../../components/Navbar";
+import TrailerModal from "../../components/TrailerModal";
 import { MovieObjectOnPage, MoviesRespObj } from "../../typing";
 
 const VideoPage = ({ movie }: { movie: MovieObjectOnPage }) => {
@@ -18,6 +19,7 @@ const VideoPage = ({ movie }: { movie: MovieObjectOnPage }) => {
       <Navbar />
       <Box sx={{ color: "#fff" }}>
         <Hero movie={movie} />
+        <TrailerModal />
       </Box>
     </div>
   );
@@ -26,10 +28,11 @@ const VideoPage = ({ movie }: { movie: MovieObjectOnPage }) => {
 export default VideoPage;
 
 export const getStaticPaths = async () => {
-  const videoResp = await Promise.all(
-    Object.values(tbdbRequests).map((url) => fetch(url))
+  const videos = await Promise.all(
+    (
+      await Promise.all(Object.values(tbdbRequests).map((url) => fetch(url)))
+    ).map((element) => element.json())
   );
-  const videos = await Promise.all(videoResp.map((element) => element.json()));
 
   const ids: number[] = videos.reduce((acc, videolist: MoviesRespObj) => {
     return [...acc, ...videolist.results.map((video) => video.id)];

@@ -17,12 +17,14 @@
     "@typegoose/typegoose": "^9.8.1",
     "@types/mongoose": "^5.11.97",
     "mongoose": "^6.3.4",
+    "nanoid": "^3.3.4",
     "next": "12.1.6",
     "next-auth": "^4.3.4",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "react-player": "^2.10.1",
-    "recoil": "^0.7.3-alpha.2"
+    "recoil": "^0.7.3-alpha.2",
+    "zod": "^3.17.3"
   },
   "devDependencies": {
     "@types/node": "17.0.35",

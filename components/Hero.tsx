@@ -5,20 +5,14 @@ import { IMAGE_BASE_URL } from "../backend/lib/tbdbRequests";
 import { MovieObjectOnPage, MovieRespObj } from "../typing";
 import {
   styled as MuiSyled,
-  createTheme,
-  useTheme,
-  ThemeProvider,
-  Theme,
 } from "@mui/material/styles";
 import {
   Add,
-  AddCircleTwoTone,
   InfoOutlined,
   PlayArrowRounded,
 } from "@mui/icons-material";
 import { useRecoilState } from "recoil";
 import { modalShowState, videoSrcState } from "../atoms/generalAtoms";
-import { makeStyles, createStyles } from "@mui/styles";
 
 const Hero = ({
   movie,

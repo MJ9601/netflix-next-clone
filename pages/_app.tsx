@@ -4,6 +4,7 @@ import { NextPage } from "next";
 import { ReactElement, ReactNode } from "react";
 import Head from "next/head";
 import { RecoilRoot } from "recoil";
+import { SessionProvider } from "next-auth/react";
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -21,7 +22,9 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         <title>Netflix clone</title>
       </Head>
 
-      <RecoilRoot>{getLayout(<Component {...pageProps} />)}</RecoilRoot>
+      <SessionProvider session={pageProps?.session}>
+        <RecoilRoot>{getLayout(<Component {...pageProps} />)}</RecoilRoot>
+      </SessionProvider>
     </>
   );
 }

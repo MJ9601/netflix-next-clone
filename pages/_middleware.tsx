@@ -8,7 +8,7 @@ export async function middleware(req: NextRequest) {
       secret: process.env.NEXTAUTH_SECRET,
       secureCookie: process.env.NODE_ENV == "production",
     });
-    // if (!session) return NextResponse.redirect(new URL("/subscribe", req.url));
+    if (!session) return NextResponse.redirect(new URL("/subscribe", req.url));
 
     return NextResponse.next();
   }

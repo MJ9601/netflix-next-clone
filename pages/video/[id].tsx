@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { GetStaticProps } from "next";
 import Head from "next/head";
-import React from "react";
+import React, { useEffect } from "react";
 import tbdbRequests, {
   urlForMovieWithId,
 } from "../../backend/lib/tbdbRequests";
@@ -9,8 +9,16 @@ import Hero from "../../components/Hero";
 import Navbar from "../../components/Navbar";
 import TrailerModal from "../../components/TrailerModal";
 import { MovieObjectOnPage, MoviesRespObj } from "../../typing";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 const VideoPage = ({ movie }: { movie: MovieObjectOnPage }) => {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!session) router.push("/subscribe");
+  }, [session]);
   return (
     <div>
       <Head>

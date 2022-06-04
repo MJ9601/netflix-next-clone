@@ -6,8 +6,21 @@ import { red } from "@mui/material/colors";
 import MainPageRowSec from "../components/MainPageRowSec";
 import AuthLayout from "../layout/AuthLayout";
 import { subscribePageLoad } from "../backend/lib/pageLoads";
+import {
+  getCsrfToken,
+  getProviders,
+  getSession,
+  signIn,
+} from "next-auth/react";
+import { Provider } from "next-auth/providers";
 
-const Subscribe = () => {
+const Subscribe = ({
+  providers,
+  csrfToken,
+}: {
+  providers: Provider;
+  csrfToken: any;
+}) => {
   return (
     <div>
       <Head>
@@ -34,6 +47,7 @@ const Subscribe = () => {
               backgroundColor: red["A400"],
               ":hover": { background: red["A400"] },
             }}
+            onClick={() => signIn()}
           >
             sign in
           </Button>
@@ -66,24 +80,37 @@ const Subscribe = () => {
               >
                 Subscribe for your membership Now!
               </Typography>
-              <Stack
-                direction="row"
-                justifyContent="center"
-                alignItems="center"
-              >
-                <InputTag type="email" placeholder="@example.com" />
-                <Button
-                  variant="contained"
-                  size="large"
-                  sx={{
-                    backgroundColor: red["A400"],
-                    borderRadius: "0",
-                    ":hover": { backgroundColor: red["A400"] },
-                  }}
+              <form action="/api/auth/signin/email" method="post">
+                <Stack
+                  direction="row"
+                  justifyContent="center"
+                  alignItems="center"
                 >
-                  Subscribe
-                </Button>
-              </Stack>
+                  <input
+                    type="hidden"
+                    defaultValue={csrfToken}
+                    name="csrfToken"
+                  />
+                  <InputTag
+                    type="email"
+                    placeholder="@example.com"
+                    id="email"
+                    name="email"
+                  />
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    size="large"
+                    sx={{
+                      backgroundColor: red["A400"],
+                      borderRadius: "0",
+                      ":hover": { backgroundColor: red["A400"] },
+                    }}
+                  >
+                    Subscribe
+                  </Button>
+                </Stack>
+              </form>
             </Stack>
           </Center>
         </Wrapper>
@@ -104,6 +131,24 @@ const Subscribe = () => {
 
 Subscribe.getLayout = (page: ReactElement) => <AuthLayout>{page}</AuthLayout>;
 export default Subscribe;
+
+export const getServerSideProps = async (ctx: any) => {
+  const { req, res } = ctx;
+  const session = await getSession({ req });
+  if (session && res) {
+    res.writeHead(302, {
+      Location: "/",
+    });
+    res.end();
+    return;
+  }
+  return {
+    props: {
+      providers: await getProviders(),
+      csrfToken: await getCsrfToken(),
+    },
+  };
+};
 
 const ImageTage = styled("img")(({ theme }) => ({
   width: "100%",

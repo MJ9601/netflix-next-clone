@@ -51,8 +51,8 @@ const Account = () => {
               </Stack>
             </Stack>
             <CustomeDivider />
-            <Grid container>
-              <Grid item xs={4} spacing={2}>
+            <Grid container spacing={2}>
+              <Grid item sm={4} xs={6}>
                 <Typography
                   variant="body2"
                   component="p"
@@ -72,7 +72,7 @@ const Account = () => {
                   Cancel Membership
                 </Button>
               </Grid>
-              <Grid item xs={8}>
+              <Grid item xs={12} sm={8}>
                 <Typography variant="body2" component="p">
                   {session?.user?.email}
                 </Typography>

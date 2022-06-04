@@ -20,8 +20,8 @@ export default NextAuth({
   adapter: MongoDBAdapter(clientPromise),
   pages: {
     signIn: "/subscribe",
-    newUser: "/account",
-    verifyRequest:'/verifyRequest'
+    newUser: "/plans",
+    verifyRequest: "/verifyRequest",
   },
   session: {
     strategy: "jwt",

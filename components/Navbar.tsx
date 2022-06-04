@@ -2,10 +2,13 @@ import { Box, IconButton, Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
-import { Notifications, Search } from "@mui/icons-material";
+import { Notifications, Search, Settings } from "@mui/icons-material";
+import { signOut } from "next-auth/react";
+import { useRouter } from "next/router";
 
 const Navbar = () => {
   const [darkBg, setDarkBg] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     window.addEventListener("scroll", () => {
@@ -41,7 +44,10 @@ const Navbar = () => {
         <IconButton sx={{ color: "#fff" }}>
           <Notifications />
         </IconButton>
-        <ImageTag src="/images/face.jpg" isFace />
+        <IconButton onClick={() => router.push("/account")}>
+          <Settings sx={{ color: "#fff" }} />
+        </IconButton>
+        <ImageTag src="/images/face.jpg" isFace onClick={() => signOut()} />
       </Stack>
     </CustomeBox>
   );
@@ -67,10 +73,10 @@ const CustomeBox = styled(Box)<CustomeBg>(({ theme, darkBg }) => ({
   transition: "all .3s ease",
 }));
 
-type ImgType = {
+export type ImgType = {
   isFace?: boolean;
 };
-const ImageTag = styled("img")<ImgType>(({ theme, isFace }) => ({
+export const ImageTag = styled("img")<ImgType>(({ theme, isFace }) => ({
   height: !isFace ? "50px" : "25px",
   objectFit: "contain",
   cursor: "pointer",

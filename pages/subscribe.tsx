@@ -2,7 +2,7 @@ import { styled } from "@mui/material/styles";
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import Head from "next/head";
 import React, { ReactElement } from "react";
-import { red } from "@mui/material/colors";
+import { red, grey } from "@mui/material/colors";
 import MainPageRowSec from "../components/MainPageRowSec";
 import AuthLayout from "../layout/AuthLayout";
 import { subscribePageLoad } from "../backend/lib/pageLoads";
@@ -41,16 +41,6 @@ const Subscribe = ({
           zIndex={100}
         >
           <Logo src="/images/logo.png" />
-          <Button
-            variant="contained"
-            sx={{
-              backgroundColor: red["A400"],
-              ":hover": { background: red["A400"] },
-            }}
-            onClick={() => signIn()}
-          >
-            sign in
-          </Button>
         </Stack>
         <ImageTage src="/images/background.jpg" />
         <Wrapper>
@@ -80,37 +70,42 @@ const Subscribe = ({
               >
                 Subscribe for your membership Now!
               </Typography>
-              <form action="/api/auth/signin/email" method="post">
-                <Stack
-                  direction="row"
-                  justifyContent="center"
-                  alignItems="center"
+              <Stack
+                component="form"
+                method="post"
+                action="/api/auth/signin/email"
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+              >
+                <input
+                  type="hidden"
+                  defaultValue={csrfToken}
+                  name="csrfToken"
+                />
+                <InputTag
+                  type="email"
+                  placeholder="@example.com"
+                  id="email"
+                  name="email"
+                />
+                <Button
+                  type="submit"
+                  variant="contained"
+                  size="large"
+                  sx={{
+                    backgroundColor: red["A400"],
+                    borderRadius: "0",
+                    textTransform: "capitalize",
+                    ":hover": {
+                      color: red["A400"],
+                      backgroundColor: grey["800"],
+                    },
+                  }}
                 >
-                  <input
-                    type="hidden"
-                    defaultValue={csrfToken}
-                    name="csrfToken"
-                  />
-                  <InputTag
-                    type="email"
-                    placeholder="@example.com"
-                    id="email"
-                    name="email"
-                  />
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    size="large"
-                    sx={{
-                      backgroundColor: red["A400"],
-                      borderRadius: "0",
-                      ":hover": { backgroundColor: red["A400"] },
-                    }}
-                  >
-                    Subscribe
-                  </Button>
-                </Stack>
-              </form>
+                  Subscribe/Signin
+                </Button>
+              </Stack>
             </Stack>
           </Center>
         </Wrapper>
@@ -145,7 +140,7 @@ export const getServerSideProps = async (ctx: any) => {
   return {
     props: {
       providers: await getProviders(),
-      csrfToken: await getCsrfToken(),
+      csrfToken: await getCsrfToken(ctx),
     },
   };
 };
@@ -166,7 +161,7 @@ const Wrapper = styled(Box)(({ theme }) => ({
   color: "#fff",
 }));
 
-const Logo = styled("img")(({ theme }) => ({
+export const Logo = styled("img")(({ theme }) => ({
   height: "80px",
   objectFit: "contain",
 }));
@@ -182,7 +177,7 @@ const InputTag = styled("input")(() => ({
   background: "#fff",
   border: "none",
   fontSize: "20px",
-  padding: "9px",
+  padding: "10px",
   "&:focus": {
     outline: "none",
   },

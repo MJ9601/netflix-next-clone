@@ -8,8 +8,7 @@ export default NextAuth({
     EmailProvider({
       server: {
         host: process.env.EMAIL_SERVER_HOST,
-        post: process.env.EMAIL_SERVER_PORT,
-        secure: true,
+        port: process.env.EMAIL_SERVER_PORT,
         auth: {
           user: process.env.EMAIL_SERVER_USER,
           pass: process.env.EMAIL_SERVER_PASSWORD,
@@ -20,8 +19,9 @@ export default NextAuth({
   ],
   adapter: MongoDBAdapter(clientPromise),
   pages: {
-    // signIn: "/subscribe",
+    signIn: "/subscribe",
     newUser: "/account",
+    verifyRequest:'/verifyRequest'
   },
   session: {
     strategy: "jwt",

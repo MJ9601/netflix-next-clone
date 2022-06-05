@@ -34,3 +34,24 @@ export const subscribePageLoad = [
     url: "/images/kids.png",
   },
 ];
+
+export const plansInfo = {
+  Basic: {
+    "Monthly price": "$50",
+    "Video Quality": "Good",
+    Resolution: "480p",
+    "Access from any where": "check",
+  },
+  Standard: {
+    "Monthly price": "$60",
+    "Video Quality": "Better",
+    Resolution: "1080p",
+    "Access from any where": "check",
+  },
+  Premium: {
+    "Monthly price": "$80",
+    "Video Quality": "Best",
+    Resolution: "4k",
+    "Access from any where": "check",
+  },
+};

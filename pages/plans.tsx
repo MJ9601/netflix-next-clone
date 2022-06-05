@@ -31,9 +31,8 @@ const converter = (obj: object) =>
   )[0];
 
 const Plans = () => {
-  const [selecter, setSelecter] = useState(2);
+  const [selecter, setSelecter] = useState(Object.keys(plansInfo).length - 1);
   const asSorted = converter(plansInfo);
-  console.log(asSorted);
   return (
     <>
       <CustomeContainer>

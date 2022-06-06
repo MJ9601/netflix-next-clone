@@ -29,7 +29,9 @@ const Navbar = () => {
         <CustomeButton>TV Shows</CustomeButton>
         <CustomeButton>Movies</CustomeButton>
         <CustomeButton>News & Popular</CustomeButton>
-        <CustomeButton>My List</CustomeButton>
+        <CustomeButton onClick={() => router.push("/mylist")}>
+          My List
+        </CustomeButton>
       </Stack>
       <Stack
         direction="row"

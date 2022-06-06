@@ -1,10 +1,15 @@
 import styled from "@emotion/styled";
 import { Box, Button, IconButton, Stack, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IMAGE_BASE_URL } from "../backend/lib/tbdbRequests";
-import { MovieObjectOnPage, MovieRespObj } from "../typing";
+import { MovieObjectOnPage, MovieRespObj, UserInfos } from "../typing";
 import { styled as MuiSyled } from "@mui/material/styles";
-import { Add, InfoOutlined, PlayArrowRounded } from "@mui/icons-material";
+import {
+  Add,
+  InfoOutlined,
+  PlayArrowRounded,
+  Remove,
+} from "@mui/icons-material";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import {
   modalShowState,
@@ -18,10 +23,31 @@ const Hero = ({
   movie: MovieRespObj | null | MovieObjectOnPage;
 }) => {
   const setShow = useSetRecoilState(modalShowState);
-  const setVideoId = useSetRecoilState(videoSrcState);
+  const [videoId, setVideoId] = useRecoilState(videoSrcState);
   const [wishlist, setWishlist] = useRecoilState(wishListState);
   const [isInList, setIsInList] = useState(false);
-  
+  useEffect(() => {
+    const onList = wishlist.find((video) => video?.id == videoId);
+    setIsInList(!onList ? true : false);
+  }, [wishlist]);
+
+  const handleWishlist = async () => {
+    await (
+      await fetch("/api/userInfo", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          video: movie,
+        }),
+      })
+    ).json();
+    const updatedUserInfo: UserInfos = await (
+      await fetch("/api/userInfo")
+    ).json();
+    setWishlist(updatedUserInfo.wishlist);
+  };
   return (
     <Box position="relative" width="100%" height="100vh">
       <ImageTag src={`${IMAGE_BASE_URL}${movie?.backdrop_path}`} />
@@ -82,21 +108,38 @@ const Hero = ({
             >
               More Info
             </CustomeButton>
-            <IconButton>
-              <Add
-                sx={{
-                  color: "#fff",
-                  fontSize: 40,
-                  borderRadius: "50%",
-                  transition: "all .3s ease",
-                  backgroundColor: "rgba(255,255,255, .4)",
-                  outline: "2px solid rgba(255,255,255, .4)",
-                  ":hover": {
-                    outline: "2px solid #fff",
-                    backgroundColor: "rgba(255,255, 255, .2)",
-                  },
-                }}
-              />
+            <IconButton onClick={handleWishlist}>
+              {!isInList ? (
+                <Add
+                  sx={{
+                    color: "#fff",
+                    fontSize: 40,
+                    borderRadius: "50%",
+                    transition: "all .3s ease",
+                    backgroundColor: "rgba(255,255,255, .4)",
+                    outline: "2px solid rgba(255,255,255, .4)",
+                    ":hover": {
+                      outline: "2px solid #fff",
+                      backgroundColor: "rgba(255,255, 255, .2)",
+                    },
+                  }}
+                />
+              ) : (
+                <Remove
+                  sx={{
+                    color: "#fff",
+                    fontSize: 40,
+                    borderRadius: "50%",
+                    transition: "all .3s ease",
+                    backgroundColor: "rgba(255,255,255, .4)",
+                    outline: "2px solid rgba(255,255,255, .4)",
+                    ":hover": {
+                      outline: "2px solid #fff",
+                      backgroundColor: "rgba(255,255, 255, .2)",
+                    },
+                  }}
+                />
+              )}
             </IconButton>
           </Stack>
         </Box>

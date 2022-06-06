@@ -8,24 +8,17 @@ import {
   wishListState,
 } from "../atoms/generalAtoms";
 import { urlForMovieWithId } from "../backend/lib/tbdbRequests";
-import { MovieObjectOnPage } from "../typing";
+import { MovieObjectOnPage, UserInfos } from "../typing";
 import ReactPalyer from "react-player/youtube";
 import { makeStyles } from "@mui/styles";
 import {
-  AddCircle,
-  AddCircleOutline,
   AddCircleTwoTone,
   Close,
   HdTwoTone,
   Pause,
-  PauseCircle,
   PlayArrowRounded,
-  RemoveCircleOutline,
   RemoveCircleTwoTone,
-  VolumeMute,
-  VolumeOff,
   VolumeOffTwoTone,
-  VolumeUpRounded,
   VolumeUpTwoTone,
 } from "@mui/icons-material";
 
@@ -38,14 +31,33 @@ const TrailerModal = () => {
   const [wishlist, setWishlist] = useRecoilState(wishListState);
   const [isOnlist, setIsOnlist] = useState(false);
 
-  const handleToggleWishlist = () => {};
+  const handleToggleWishlist = async () => {
+    await (
+      await fetch("/api/userInfo", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          video: videoInfo,
+        }),
+      })
+    ).json();
+    const updatedUserInfo: UserInfos = await (
+      await fetch("/api/userInfo")
+    ).json();
+    setWishlist(updatedUserInfo.wishlist);
+  };
 
   useEffect(() => {
     const getVideoInfo = async () => {
       setVideoInfo(await (await fetch(urlForMovieWithId(videoId))).json());
     };
     if (videoId) getVideoInfo();
-  }, [videoId]);
+
+    const onlist = wishlist?.find((video) => video?.id == videoId);
+    setIsOnlist(!onlist ? false : true);
+  }, [wishlist]);
 
   const releaseDate = new Date(videoInfo?.release_date || Date.now());
   const classes = useStyles();
@@ -163,7 +175,7 @@ const TrailerModal = () => {
                   )}
                 </IconButton>
                 <IconButton onClick={() => handleToggleWishlist()}>
-                  {isOnlist ? (
+                  {!isOnlist ? (
                     <RemoveCircleTwoTone className={classes.icons} />
                   ) : (
                     <AddCircleTwoTone className={classes.icons} />

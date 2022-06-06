@@ -1,27 +1,27 @@
 import styled from "@emotion/styled";
 import { Box, Button, IconButton, Stack, Typography } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { IMAGE_BASE_URL } from "../backend/lib/tbdbRequests";
 import { MovieObjectOnPage, MovieRespObj } from "../typing";
+import { styled as MuiSyled } from "@mui/material/styles";
+import { Add, InfoOutlined, PlayArrowRounded } from "@mui/icons-material";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import {
-  styled as MuiSyled,
-} from "@mui/material/styles";
-import {
-  Add,
-  InfoOutlined,
-  PlayArrowRounded,
-} from "@mui/icons-material";
-import { useRecoilState } from "recoil";
-import { modalShowState, videoSrcState } from "../atoms/generalAtoms";
+  modalShowState,
+  videoSrcState,
+  wishListState,
+} from "../atoms/generalAtoms";
 
 const Hero = ({
   movie,
 }: {
   movie: MovieRespObj | null | MovieObjectOnPage;
 }) => {
-  const [show, setShow] = useRecoilState(modalShowState);
-  const [videoId, setVideoId] = useRecoilState(videoSrcState);
-
+  const setShow = useSetRecoilState(modalShowState);
+  const setVideoId = useSetRecoilState(videoSrcState);
+  const [wishlist, setWishlist] = useRecoilState(wishListState);
+  const [isInList, setIsInList] = useState(false);
+  
   return (
     <Box position="relative" width="100%" height="100vh">
       <ImageTag src={`${IMAGE_BASE_URL}${movie?.backdrop_path}`} />

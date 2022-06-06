@@ -164,6 +164,7 @@ const Wrapper = styled(Box)(({ theme }) => ({
 export const Logo = styled("img")(({ theme }) => ({
   height: "80px",
   objectFit: "contain",
+  cursor: "pointer",
 }));
 
 const Center = styled("div")(() => ({

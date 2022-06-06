@@ -17,6 +17,9 @@ import { CustomeContainer } from "./verifyRequest";
 import { styled } from "@mui/material/styles";
 import GridSection from "../components/GridSection";
 import { plansInfo } from "../backend/lib/pageLoads";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { useRouter } from "next/router";
+import { UserInfos } from "../typing";
 
 const converter = (obj: object) =>
   Object.values(obj).map((value) =>
@@ -30,9 +33,30 @@ const converter = (obj: object) =>
     }, {})
   )[0];
 
-const Plans = () => {
-  const [selecter, setSelecter] = useState(Object.keys(plansInfo).length - 1);
+const Plans = ({ userInfos }: { userInfos: UserInfos }) => {
+  const router = useRouter();
+  const [selecter, setSelecter] = useState(
+    userInfos?.plan != ""
+      ? Object.keys(plansInfo).indexOf(userInfos?.plan)
+      : Object.keys(plansInfo).length - 1
+  );
   const asSorted = converter(plansInfo);
+
+  const selectPlan = async () => {
+    await (
+      await fetch("/api/userInfo", {
+        method: "PATCH",
+        body: JSON.stringify({
+          plan: Object.keys(plansInfo)[selecter],
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+    ).json();
+
+    router.push("/");
+  };
   return (
     <>
       <CustomeContainer>
@@ -134,7 +158,10 @@ const Plans = () => {
           </Stack>
 
           <Box display="flex" justifyContent="center" mt="20px">
-            <CustomButton sx={{ ":hover": { width: "100%" } }}>
+            <CustomButton
+              sx={{ ":hover": { width: "100%" } }}
+              onClick={selectPlan}
+            >
               submit
             </CustomButton>
           </Box>
@@ -145,6 +172,30 @@ const Plans = () => {
 };
 
 export default Plans;
+
+export const getServerSideProps: GetServerSideProps = async (
+  ctx: GetServerSidePropsContext
+) => {
+  const { req } = ctx;
+
+  const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+  const userInfos = await (
+    await fetch(`${baseUrl}/api/userInfo`, {
+      headers: {
+        cookie: String(req.headers.cookie),
+      },
+    })
+  ).json();
+
+  if (!userInfos)
+    return {
+      props: {
+        userInfos: null,
+      },
+    };
+
+  return { props: { userInfos } };
+};
 
 type CustomWrap = {
   active?: boolean;

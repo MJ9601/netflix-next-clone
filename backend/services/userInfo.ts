@@ -3,17 +3,17 @@ import { connectToDB } from "../utils/mongodbConn";
 
 export const createNewUserInfo = async ({
   body,
-  userEmail,
+  ownerId,
 }: {
   body: any;
-  userEmail: string;
+  ownerId: string;
 }) => {
   const { db } = await connectToDB();
 
-  const userInfos = { ...body, owner: userEmail };
+  const userInfos = { ...body, owner: ownerId };
   try {
     const newUserInfo = await db
-      .collection("userInfos")
+      .collection("user_infos")
       .insertOne({ ...userInfos, createdAt: new Date() });
 
     return { newUserInfo };
@@ -24,32 +24,32 @@ export const createNewUserInfo = async ({
 
 export const updateUserWishlist = async ({
   body,
-  userEmail,
+  ownerId,
 }: {
   body: any;
-  userEmail: string;
+  ownerId: string;
 }) => {
   const { db } = await connectToDB();
   try {
     const userInfo = await db
-      .collection("userInfos")
-      .findOne({ owner: userEmail });
+      .collection("user_infos")
+      .findOne({ owner: ownerId });
     const video = userInfo.wishlist.find(
       (videoInfo: MovieObjectOnPage | MovieRespObj) =>
         videoInfo?.id == body.video.id
     );
     if (!video) {
       const updatedWishlist = await db
-        .collection("userInfos")
+        .collection("user_infos")
         .updateOne(
-          { owner: userEmail },
+          { owner: ownerId },
           { $set: { wishlist: [...userInfo.wishlist, body.video] } },
           { new: true }
         );
       return { updatedWishlist };
     } else {
-      const updatedWishlist = await db.collection("userInfos").updateOne(
-        { owner: userEmail },
+      const updatedWishlist = await db.collection("user_infos").updateOne(
+        { owner: ownerId },
         {
           $set: {
             wishlist: [
@@ -69,10 +69,18 @@ export const updateUserWishlist = async ({
   }
 };
 
-export const getUserInfos = async ({ userEmail }: { userEmail: string }) => {
+export const getUserInfos = async ({ ownerId }: { ownerId: string }) => {
   const { db } = await connectToDB();
   try {
-    const userInfos = db.collection("userInfos").findOne({ owner: userEmail });
+    const userInfos = await db
+      .collection("user_infos")
+      .findOne({ owner: ownerId });
+    if (!userInfos)
+      await db.collection("user_infos").insertOne({
+        owner: ownerId,
+        plan: "",
+        wishlist: [],
+      });
     return { userInfos };
   } catch (error) {
     return { error };
@@ -81,16 +89,19 @@ export const getUserInfos = async ({ userEmail }: { userEmail: string }) => {
 
 export const updateUserPlanInfo = async ({
   body,
-  userEmail,
+  ownerId,
 }: {
   body: any;
-  userEmail: string;
+  ownerId: string;
 }) => {
   const { db } = await connectToDB();
   try {
     const updatedPlan = await db
-      .collection("userInfos")
-      .updateOne({ owner: userEmail }, { $set: { plan: body.plan } });
+      .collection("user_infos")
+      .updateOne(
+        { owner: ownerId },
+        { $set: { plan: body.plan, updatedAt: new Date() } }
+      );
     return { updatedPlan };
   } catch (error) {
     return { error };

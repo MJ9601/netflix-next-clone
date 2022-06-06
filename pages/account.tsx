@@ -15,12 +15,17 @@ import { Logo } from "./subscribe";
 import { signOut, useSession } from "next-auth/react";
 import { CustomeContainer } from "./verifyRequest";
 import { FileCopyOutlined } from "@mui/icons-material";
-import { blue, grey, red } from "@mui/material/colors";
+import { blue, green, grey, red } from "@mui/material/colors";
 import { useRouter } from "next/router";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { UserInfos } from "../typing";
 
-const Account = () => {
+const Account = ({ userInfos }: { userInfos: UserInfos }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const updatedTime: string[] = userInfos.updatedAt.split("-");
+  updatedTime[1] = String(`0${Number(userInfos.updatedAt.split("-")[1]) + 1}`);
+  const dueTime = new Date(updatedTime.join("-"));
 
   return (
     <div>
@@ -37,7 +42,7 @@ const Account = () => {
             width="100%"
             mb="30px"
           >
-            <Logo src="/images/logo.png" />
+            <Logo src="/images/logo.png" onClick={() => router.push("/")} />
             <ImageTag src="/images/face.jpg" isFace onClick={() => signOut()} />
           </Stack>
           <Container>
@@ -83,7 +88,14 @@ const Account = () => {
                   alignItems="start"
                 >
                   <Typography variant="body2" component="p">
-                    Your next billing date is {"date"}
+                    Your next billing date is{" "}
+                    <Typography
+                      variant="body2"
+                      component="span"
+                      sx={(theme) => ({ color: green[600] })}
+                    >
+                      {dueTime.toDateString()}
+                    </Typography>
                   </Typography>
                   <Stack direction="column" alignItems="end" gap="2px">
                     <CustomeLink>Manage Payment info</CustomeLink>
@@ -104,7 +116,7 @@ const Account = () => {
               <Grid item xs={8}>
                 <Stack direction="row" justifyContent="space-between">
                   <Typography variant="body2" component="p">
-                    Premium
+                    {userInfos.plan}
                   </Typography>
                   <CustomeLink onClick={() => router.push("/plans")}>
                     Change plan
@@ -120,7 +132,9 @@ const Account = () => {
                 </Typography>
               </Grid>
               <Grid item xs={8}>
-                <CustomeLink>Change plan</CustomeLink>
+                <CustomeLink onClick={() => router.push("/plans")}>
+                  Change plan
+                </CustomeLink>
               </Grid>
             </Grid>
           </Container>
@@ -131,6 +145,30 @@ const Account = () => {
 };
 
 export default Account;
+
+export const getServerSideProps: GetServerSideProps = async (
+  ctx: GetServerSidePropsContext
+) => {
+  const { req } = ctx;
+
+  const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+  const userInfos = await (
+    await fetch(`${baseUrl}/api/userInfo`, {
+      headers: {
+        cookie: String(req.headers.cookie),
+      },
+    })
+  ).json();
+
+  if (!userInfos)
+    return {
+      props: {
+        userInfos: null,
+      },
+    };
+
+  return { props: { userInfos } };
+};
 
 export const CustomeTypo = styled("p")(({ theme }) => ({
   color: grey[600],

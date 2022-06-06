@@ -1,22 +1,29 @@
 import { Box, Stack, Typography } from "@mui/material";
 import Head from "next/head";
 import { ReactElement, useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
-import { modalShowState } from "../atoms/generalAtoms";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { modalShowState, wishListState } from "../atoms/generalAtoms";
 import tbdbRequests from "../backend/lib/tbdbRequests";
 import Hero from "../components/Hero";
 import Navbar from "../components/Navbar";
 import TrailerModal from "../components/TrailerModal";
 import PageLayout from "../layout/AuthLayout";
-import { MovieRespObj, MoviesObject, MoviesRespObj } from "../typing";
+import { MovieRespObj, MoviesObject, UserInfos } from "../typing";
 import styled from "@emotion/styled";
 import MovieCard from "../components/MovieCard";
-import { makeStyles } from "@mui/styles";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
 
-const Home = ({ moviesObject }: { moviesObject: MoviesObject }) => {
+const Home = ({
+  moviesObject,
+  userInfos,
+}: {
+  moviesObject: MoviesObject;
+  userInfos: UserInfos;
+}) => {
   const [randomMovie, setRandomMovie] = useState<MovieRespObj | null>(null);
+  const setWishlist = useSetRecoilState(wishListState);
 
-  const [isOpend, setIsOpend] = useRecoilState(modalShowState);
+  const isOpend = useRecoilValue(modalShowState);
 
   useEffect(() => {
     setRandomMovie(
@@ -24,8 +31,8 @@ const Home = ({ moviesObject }: { moviesObject: MoviesObject }) => {
         Math.floor(Math.random() * Object.values(moviesObject).length)
       ].results[Math.floor(Math.random() * 20)]
     );
-  }, [moviesObject]);
-
+    setWishlist(userInfos.wishlist);
+  }, []);
   return (
     <div>
       <Head>
@@ -57,7 +64,9 @@ const Home = ({ moviesObject }: { moviesObject: MoviesObject }) => {
 Home.getLayout = (page: ReactElement) => <PageLayout>{page}</PageLayout>;
 export default Home;
 
-export const getServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (
+  ctx: GetServerSidePropsContext
+) => {
   const rowHeadLines = Object.keys(tbdbRequests);
   const rowValueResp = await Promise.all(
     Object.values(tbdbRequests).map((url) => fetch(url))
@@ -69,9 +78,20 @@ export const getServerSideProps = async () => {
     return { ...acc, [headline]: rowValues[index] };
   }, {});
 
+  const { req } = ctx;
+  const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+  const userInfos = await (
+    await fetch(`${baseUrl}/api/userInfo`, {
+      headers: {
+        cookie: String(req.headers.cookie),
+      },
+    })
+  ).json();
+
   return {
     props: {
       moviesObject,
+      userInfos,
     },
   };
 };

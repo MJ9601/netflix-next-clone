@@ -1,7 +1,7 @@
 import { IconButton, Modal, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import React, { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import {
   modalShowState,
   videoSrcState,
@@ -30,7 +30,7 @@ import {
 } from "@mui/icons-material";
 
 const TrailerModal = () => {
-  const [videoId, setVideoId] = useRecoilState(videoSrcState);
+  const videoId = useRecoilValue(videoSrcState);
   const [videoInfo, setVideoInfo] = useState<MovieObjectOnPage | null>(null);
   const [open, setOpen] = useRecoilState(modalShowState);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -38,17 +38,7 @@ const TrailerModal = () => {
   const [wishlist, setWishlist] = useRecoilState(wishListState);
   const [isOnlist, setIsOnlist] = useState(false);
 
-  const handleToggleWishlist = () => {
-    const movie = wishlist?.find((movie) => movie?.id == videoId);
-
-    if (!movie) {
-      setWishlist((old) => [...old, videoInfo]);
-      setIsOnlist(true);
-    } else {
-      setWishlist((old) => old?.filter((element) => element?.id == videoId));
-      setIsOnlist(false);
-    }
-  };
+  const handleToggleWishlist = () => {};
 
   useEffect(() => {
     const getVideoInfo = async () => {
@@ -58,7 +48,6 @@ const TrailerModal = () => {
   }, [videoId]);
 
   const releaseDate = new Date(videoInfo?.release_date || Date.now());
-  console.log(videoInfo);
   const classes = useStyles();
   return (
     <>
@@ -69,7 +58,7 @@ const TrailerModal = () => {
               `https://www.youtube.com/watch?v=${
                 videoInfo?.videos?.results?.filter(
                   (element) => element.type == "Trailer"
-                )[0].key
+                )[0]?.key
               }` || ""
             }
             muted={isMuted}

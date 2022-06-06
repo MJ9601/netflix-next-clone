@@ -19,30 +19,36 @@ export default async function handler(
   });
 
   if (method == "POST") {
+    // creating userinfos
+
     const { newUserInfo, error } = await createNewUserInfo({
       body,
-      userEmail: String(decoded?.email),
+      ownerId: String(decoded?.sub),
     });
-    !error ? res.status(400).send(error) : res.status(201).send(newUserInfo);
+    error ? res.status(400).send(error) : res.status(201).send(newUserInfo);
   } else if (method == "GET") {
+    // getting userinfos
+
     const { error, userInfos } = await getUserInfos({
-      userEmail: String(decoded?.email),
+      ownerId: String(decoded?.sub),
     });
 
-    !error ? res.status(400).send(error) : res.status(201).send(userInfos);
+    error ? res.status(400).send(error) : res.status(201).send(userInfos);
   } else if (method == "PUT") {
+    //updating wishlist
+
     const { error, updatedWishlist } = await updateUserWishlist({
       body,
-      userEmail: String(decoded?.email),
+      ownerId: String(decoded?.sub),
     });
-    !error
-      ? res.status(400).send(error)
-      : res.status(201).send(updatedWishlist);
+    error ? res.status(400).send(error) : res.status(201).send(updatedWishlist);
   } else if (method == "PATCH") {
+    // updating userPlan
+    console.log(body);
     const { error, updatedPlan } = await updateUserPlanInfo({
       body,
-      userEmail: String(decoded?.email),
+      ownerId: String(decoded?.sub),
     });
-    !error ? res.status(400).send(error) : res.status(201).send(updatedPlan);
+    error ? res.status(400).send(error) : res.status(201).send(updatedPlan);
   }
 }

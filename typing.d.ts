@@ -72,3 +72,11 @@ export type MovieObjectOnPage = {
     ];
   };
 } | null;
+
+export type UserInfos = {
+  _id: string;
+  owner: string;
+  plan: string;
+  wishlist: (MovieObjectOnPage | MovieRespObj)[] | [];
+  updatedAt: string;
+};

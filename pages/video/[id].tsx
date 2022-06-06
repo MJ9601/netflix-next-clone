@@ -1,5 +1,9 @@
 import { Box } from "@mui/material";
-import { GetStaticProps } from "next";
+import {
+  GetServerSideProps,
+  GetServerSidePropsContext,
+  GetStaticProps,
+} from "next";
 import Head from "next/head";
 import React, { useEffect } from "react";
 import tbdbRequests, {
@@ -35,32 +39,48 @@ const VideoPage = ({ movie }: { movie: MovieObjectOnPage }) => {
 
 export default VideoPage;
 
-export const getStaticPaths = async () => {
-  const videos = await Promise.all(
-    (
-      await Promise.all(Object.values(tbdbRequests).map((url) => fetch(url)))
-    ).map((element) => element.json())
-  );
+// export const getStaticPaths = async () => {
+//   const videos = await Promise.all(
+//     (
+//       await Promise.all(Object.values(tbdbRequests).map((url) => fetch(url)))
+//     ).map((element) => element.json())
+//   );
 
-  const ids: number[] = videos.reduce((acc, videolist: MoviesRespObj) => {
-    return [...acc, ...videolist.results.map((video) => video.id)];
-  }, []);
+//   const ids: number[] = videos.reduce((acc, videolist: MoviesRespObj) => {
+//     return [...acc, ...videolist.results.map((video) => video.id)];
+//   }, []);
 
-  const paths = ids.map((id) => ({
-    params: {
-      id: String(id),
-    },
-  }));
+//   const paths = ids.map((id) => ({
+//     params: {
+//       id: String(id),
+//     },
+//   }));
 
-  return {
-    paths,
-    fallback: "blocking",
-  };
-};
+//   return {
+//     paths,
+//     fallback: "blocking",
+//   };
+// };
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+// export const getStaticProps: GetStaticProps = async ({ params }) => {
+//   const url = urlForMovieWithId(String(params?.id));
+
+//   const movie = await (await fetch(url)).json();
+//   if (!movie) return { notFound: true };
+
+//   return {
+//     props: {
+//       movie,
+//     },
+//     revalidate: 3600 * 60 * 24,
+//   };
+// };
+
+export const getServerSideProps: GetServerSideProps = async (
+  ctx: GetServerSidePropsContext
+) => {
+  const { params } = ctx;
   const url = urlForMovieWithId(String(params?.id));
-
   const movie = await (await fetch(url)).json();
   if (!movie) return { notFound: true };
 
@@ -68,6 +88,5 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     props: {
       movie,
     },
-    revalidate: 3600 * 60 * 24,
   };
 };

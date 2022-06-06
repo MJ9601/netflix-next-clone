@@ -3,8 +3,8 @@ import { MongoClient } from "mongodb";
 // const uri = process.env.MONGODB_URI;
 // const dbName = process.env.MONGODB_DB;
 
-const uri = "mongodb://localhost:27017/linkedin"; //local server;
-const dbName = "linkedin";
+const uri = "mongodb://localhost:27017/netflix"; //local server;
+const dbName = "netflix";
 
 let cachedClient: null | any = null;
 let cachedDb: null | any = null;

@@ -6,7 +6,7 @@ export const modalShowState = atom<boolean>({
   default: false,
 });
 
-export const wishListState = atom<MovieObjectOnPage[] | []>({
+export const wishListState = atom<(MovieObjectOnPage | MovieRespObj)[] | []>({
   key: "wishListState",
   default: [],
 });

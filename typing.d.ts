@@ -52,6 +52,7 @@ export type MovieObjectOnPage = {
   vote_average: number;
   vote_count: number;
   runtime: number;
+  name?: string;
   genres: [
     {
       id: number;

@@ -84,7 +84,7 @@ export const ImageTag = styled("img")<ImgType>(({ theme, isFace }) => ({
   cursor: "pointer",
 }));
 
-const CustomeButton = styled("button")(({ theme }) => ({
+export const CustomeButton = styled("button")(({ theme }) => ({
   backgroundColor: "transparent",
   border: "none",
   fontSize: 15,

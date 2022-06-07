@@ -31,7 +31,7 @@ Recoil
 
 ## Status
 
-Under development.
+Ready for deployment
 
 ## Deploy on Vercel
 

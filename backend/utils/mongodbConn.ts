@@ -1,10 +1,10 @@
 import { MongoClient } from "mongodb";
 
-// const uri = process.env.MONGODB_URI;
-// const dbName = process.env.MONGODB_DB;
+const uri = process.env.MONGODB_URI || "mongodb://localhost:27017/netflix";
+const dbName = process.env.MONGODB_DB || "netflix";
 
-const uri = "mongodb://localhost:27017/netflix"; //local server;
-const dbName = "netflix";
+// const uri = "mongodb://localhost:27017/netflix"; //local server;
+// const dbName = "netflix";
 
 let cachedClient: null | any = null;
 let cachedDb: null | any = null;

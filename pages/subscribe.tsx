@@ -129,7 +129,7 @@ export default Subscribe;
 
 export const getServerSideProps = async (ctx: any) => {
   const { req, res } = ctx;
-  const session = await getSession({ req });
+  const session = await getSession(ctx);
   if (session && res) {
     res.writeHead(302, {
       Location: "/",

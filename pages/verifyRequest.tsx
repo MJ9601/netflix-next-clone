@@ -47,7 +47,7 @@ const VerifyRequest = () => {
                 Nexflix clone
               </Link>
               <Typography variant="body2" component="h4" mt={2}>
-                Check your spam box if email wasn't in your inbox
+                Check your spam box if email wasn&apos;t in your inbox
               </Typography>
             </Stack>
           </Paper>

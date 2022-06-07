@@ -75,7 +75,7 @@ const Plans = ({ userInfos }: { userInfos: UserInfos }) => {
         />
         <Container>
           <Typography variant="h5" component="h1">
-            Choose the plan that's right for you
+            Choose the plan that&apos;s right for you
           </Typography>
           <Stack
             direction="row"
@@ -127,7 +127,7 @@ const Plans = ({ userInfos }: { userInfos: UserInfos }) => {
             >
               <Grid item md={6} xs={12} justifyContent="center"></Grid>
               {Object.keys(plansInfo).map((name, index) => (
-                <Grid item md={2} xs={4} justifyContent="center">
+                <Grid item md={2} xs={4} justifyContent="center" key={index}>
                   <CustomeWrap
                     key={index}
                     onClick={() => setSelecter(index)}
@@ -140,7 +140,7 @@ const Plans = ({ userInfos }: { userInfos: UserInfos }) => {
             </Grid>
             <>
               {Object.entries(asSorted).map((element, index) => (
-                <>
+                <div key={index}>
                   <GridSection
                     key={index}
                     title={element[0]}
@@ -152,7 +152,7 @@ const Plans = ({ userInfos }: { userInfos: UserInfos }) => {
                       sx={{ backgroundColor: grey[800], marginTop: "-14px" }}
                     />
                   )}
-                </>
+                </div>
               ))}
             </>
           </Stack>

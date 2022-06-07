@@ -57,7 +57,7 @@ const TrailerModal = () => {
 
     const onlist = wishlist?.find((video) => video?.id == videoId);
     setIsOnlist(!onlist ? false : true);
-  }, [wishlist]);
+  }, [wishlist, videoId]);
 
   const releaseDate = new Date(videoInfo?.release_date || Date.now());
   const classes = useStyles();
@@ -140,7 +140,9 @@ const TrailerModal = () => {
                 <div className="">
                   <span className={classes.spanGray}>Genres: </span>
                   {videoInfo?.genres?.map((genre) => (
-                    <span className={classes.spanWh}>{genre.name}, </span>
+                    <span className={classes.spanWh} key={genre.id}>
+                      {genre.name},{" "}
+                    </span>
                   ))}
                 </div>
                 <div className="">

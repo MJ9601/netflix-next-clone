@@ -20,13 +20,20 @@ import { useRouter } from "next/router";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { UserInfos } from "../typing";
 
+const timeConverter = (time?: string) => {
+  if (time) {
+    const updatedTime: string[] = time.split("-");
+    updatedTime[1] = String(`0${Number(time.split("-")[1]) + 1}`);
+    const dueTime = new Date(updatedTime.join("-"));
+    return dueTime;
+  }
+  return null;
+};
+
 const Account = ({ userInfos }: { userInfos: UserInfos }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const updatedTime: string[] = userInfos.updatedAt.split("-");
-  updatedTime[1] = String(`0${Number(userInfos.updatedAt.split("-")[1]) + 1}`);
-  const dueTime = new Date(updatedTime.join("-"));
-
+  const dueTime = timeConverter(userInfos?.updatedAt);
   return (
     <div>
       <Head>
@@ -94,7 +101,7 @@ const Account = ({ userInfos }: { userInfos: UserInfos }) => {
                       component="span"
                       sx={(theme) => ({ color: green[600] })}
                     >
-                      {dueTime.toDateString()}
+                      {userInfos.updatedAt && dueTime?.toDateString()}
                     </Typography>
                   </Typography>
                   <Stack direction="column" alignItems="end" gap="2px">

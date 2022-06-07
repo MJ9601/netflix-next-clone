@@ -149,7 +149,7 @@ const Plans = ({ userInfos }: { userInfos: UserInfos }) => {
                   />
                   {Object.entries(asSorted).length - index > 1 && (
                     <Divider
-                      sx={{ backgroundColor: grey[800], marginTop: "-14px" }}
+                      sx={{ backgroundColor: grey[800], marginTop: "-00px" }}
                     />
                   )}
                 </div>

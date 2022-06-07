@@ -36,3 +36,4 @@ Ready for deployment
 ## Deploy on Vercel
 
 After finishing, project will be deployed on vercel and link to the deployed website will be added below.
+The link to access webapp [https://netflix-next-clone.vercel.app](https://netflix-next-clone.vercel.app)

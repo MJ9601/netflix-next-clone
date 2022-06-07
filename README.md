@@ -26,7 +26,7 @@ Next Auth
 Material UI
 styled motion
 Recoil
-
+mongodb && mongodb database
 ```
 
 ## Status
